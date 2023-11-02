@@ -1,5 +1,10 @@
-import "./App.css";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
+import "./App.css";
+import { getPlayers } from "./redux/Players/selectors";
+import { fetchPlayers } from "./redux/Players/playersOperation";
+import { LeaderBoard } from "./components/LeaderBoard/LeaderBoard";
 
 function App() {
   let totalGridSize = 20;
@@ -23,6 +28,16 @@ function App() {
   });
   const [snake, setSnake] = useState(snakeInitialPosition);
   const [direction, setDirection] = useState("LEFT");
+  const [playerName, setPlayerName] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  const dispatch = useDispatch();
+
+  const { players } = useSelector(getPlayers);
+
+  useEffect(() => {
+    dispatch(fetchPlayers());
+  }, [dispatch]);
 
   function renderBoard() {
     let cellArray = [];
@@ -143,9 +158,24 @@ function App() {
 
   // Handle Events and Effects
   useEffect(() => {
-    let moveSnake = setInterval(updateGame, 150);
+    let moveSnake;
+    if (playerName) {
+      moveSnake = setInterval(updateGame, 500);
+    } else {
+      return;
+    }
+
     return () => clearInterval(moveSnake);
   });
+
+  const handleInput = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const confirmPlayer = () => {
+    setPlayerName(inputValue);
+    setInputValue("");
+  };
 
   useEffect(() => {
     document.addEventListener("keydown", updateDirection);
@@ -154,10 +184,21 @@ function App() {
   });
   return (
     <main className="main">
-      <div className="score">
-        Score : <span>{score}</span>
+      <div className="wrapper">
+        <h1>Welcome to the GAME</h1>
+        <h2>Enter yor name and play</h2>
+        <label>
+          <div> Players name</div>
+          <input type="text" value={inputValue} onChange={handleInput} />
+          <button onClick={confirmPlayer}>Ok</button>
+        </label>
+        <div className="score">
+          Score : <span>{score}</span>
+        </div>
+        <div className="board">{renderBoard()}</div>
       </div>
-      <div className="board">{renderBoard()}</div>
+      <LeaderBoard players={players} />
+      <Toaster />
     </main>
   );
 }
