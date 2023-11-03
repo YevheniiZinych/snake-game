@@ -20,7 +20,7 @@ export const addPlayers = createAsyncThunk(
   async (player, thunkAPI) => {
     try {
       const { data } = await axios.post(
-        "https://snake-point-data-api.onrender.com/api/players",
+        "https://snake-point-data-api.onrender.com/api/players/create",
         player
       );
 
