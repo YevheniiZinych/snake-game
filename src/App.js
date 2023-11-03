@@ -166,7 +166,7 @@ function App() {
     let moveSnake;
 
     if (playerName) {
-      moveSnake = setInterval(updateGame, 500);
+      moveSnake = setInterval(updateGame, 400);
     } else {
       return;
     }

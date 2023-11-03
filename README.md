@@ -10,7 +10,7 @@ A good old game ## Snake will give you the opportunity to rest and relax :)
 
   ## The project is written on its own back-end
 
-  - [Backend Documentation ](https://snake-point-data-api.onrender.com/api-docs/)
+  - [Backend Documentation ](https://snake-point-data-api.onrender.com/api/docs/)
   - [Backend repo ](https://github.com/YevheniiZinych/snake-game-api)
 
 ### Start project
