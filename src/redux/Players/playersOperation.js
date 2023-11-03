@@ -8,7 +8,6 @@ export const fetchPlayers = createAsyncThunk(
       const { data } = await axios.get(
         "https://snake-point-data-api.onrender.com/api/players"
       );
-
       return data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

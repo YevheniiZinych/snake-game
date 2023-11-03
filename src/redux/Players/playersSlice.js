@@ -10,7 +10,7 @@ const playersSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(fetchPlayers.fulfilled, (state, action) => {
-      state.players.push(...action.payload);
+      state.players = action.payload;
       state.isLoading = false;
     });
     builder.addCase(fetchPlayers.rejected, (state, action) => {

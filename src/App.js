@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
 import { getPlayers } from "./redux/Players/selectors";
-import { fetchPlayers } from "./redux/Players/playersOperation";
+import { fetchPlayers, addPlayers } from "./redux/Players/playersOperation";
 import { LeaderBoard } from "./components/LeaderBoard/LeaderBoard";
+import { checkName } from "./helpers/checkName";
 
 function App() {
   let totalGridSize = 20;
@@ -86,6 +87,10 @@ function App() {
   function gameOver() {
     setSnake(snakeInitialPosition);
     setScore(0);
+    setPlayerName("");
+    dispatch(addPlayers({ name: playerName, point: score }));
+
+    // dispatch(fetchPlayers());
   }
 
   function updateGame() {
@@ -126,7 +131,7 @@ function App() {
     // checking if food was eaten or not
     if (newSnake[0].x === food.x && newSnake[0].y === food.y) {
       // Ate Food
-      setScore((sco) => sco + 1);
+      setScore((sco) => sco + 5);
       renderFood();
     } else {
       newSnake.pop();
@@ -159,6 +164,7 @@ function App() {
   // Handle Events and Effects
   useEffect(() => {
     let moveSnake;
+
     if (playerName) {
       moveSnake = setInterval(updateGame, 500);
     } else {
@@ -173,6 +179,10 @@ function App() {
   };
 
   const confirmPlayer = () => {
+    const result = checkName(inputValue, players);
+
+    if (result) return;
+
     setPlayerName(inputValue);
     setInputValue("");
   };
@@ -192,12 +202,15 @@ function App() {
           <input type="text" value={inputValue} onChange={handleInput} />
           <button onClick={confirmPlayer}>Ok</button>
         </label>
-        <div className="score">
-          Score : <span>{score}</span>
+        <div className="score_wrap">
+          <div className="score">{playerName}</div>
+          <div className="score">
+            Score : <span>{score}</span>
+          </div>
         </div>
         <div className="board">{renderBoard()}</div>
       </div>
-      <LeaderBoard players={players} />
+      <LeaderBoard players={[...players]} />
       <Toaster />
     </main>
   );
